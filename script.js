@@ -89,6 +89,9 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     })
 
   }
+  $scope.getLink = function(idx) {
+    return 'http://reddit.com/'+$scope.jokes[idx].data.permalink
+  }
 }])
 })(window.angular);
 var chunkLength = 150;

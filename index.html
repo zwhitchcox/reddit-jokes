@@ -55,9 +55,9 @@ ga('send', 'pageview');
     <span ng-click="read($index,true)">
     {{joke.data.title}}
     {{joke.data.selftext}}
-    <span>
+    </span>
     <br>
-    <a ng-href="joke.data.permalink">permalink</a>
+    <a target=_blank ng-href="http://reddit.com{{joke.data.permalink}}">permalink</a>
     </p>
 
     <br>
