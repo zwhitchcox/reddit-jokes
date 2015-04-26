@@ -22,16 +22,17 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
   $scope.played = []
   $scope.curPlay = 0
   $scope.read = function(curIdx,clicked,curPlay) {
-    if (!$scope.stopped) {
-      if (clicked) {
-        $scope.stopped = false
-        $scope.curPlay +=1
-        curPlay = $scope.curPlay
-        $scope.played = []
-        if (window.speechSynthesis !== undefined) {
-          window.speechSynthesis.cancel()
-        }
+    if (clicked) {
+      $scope.stopped = false
+      $scope.curPlay +=1
+      curPlay = $scope.curPlay
+      $scope.played = []
+      if (window.speechSynthesis !== undefined) {
+        window.speechSynthesis.cancel()
       }
+    }
+    if (!$scope.stopped) {
+
 
       if ($scope.played.some(function(cur) {return cur === curIdx}) ||
         $scope.curPlay !== curPlay) {
