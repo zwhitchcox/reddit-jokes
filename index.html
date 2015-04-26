@@ -25,6 +25,7 @@ ga('send', 'pageview');
     bottom:0;
   }
   </style>
+  <title>Reddit Jokes Text to Speech</title>
   <!-- SCROLLS -->
   <!-- load bootstrap and fontawesome via CDN -->
   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
@@ -70,18 +71,19 @@ ga('send', 'pageview');
         <div class="form-group">
           <input ng-model="custsub" type="text" placeholder="Custom Subreddit">
         </div>
-        <button ng-click="getJokes(custsub)" class="btn btn-default">Go</button>
+        <button ng-click="getJokes(custsub)" class="btn btn-sm btn-default">Go</button>
         </form>
         </li>
-        <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other Apps<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="http://zwhitchcox.github.io/reddit-comments">Comments</a></li>
-            <li><a href="http://zwhitchcox.github.io/reddit-back-when">Time Machine</a></li>
-          </ul>
-        </li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other Apps<span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="http://zwhitchcox.github.io/reddit-comments">Comments</a></li>
+          <li><a href="http://zwhitchcox.github.io/reddit-back-when">Time Machine</a></li>
         </ul>
+      </li>
       </ul>
         </li>
       </ul>
