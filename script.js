@@ -20,54 +20,67 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
         $scope.jokes = res.data.children
       })
   }
+  if (typeof(Storage) != "undefined") {
+    if (localStorage.getItem("firstTime") === null) {
+      $scope.firstTime = true
+      localStorage.setItem("firstTime", false);
+    } else {
+      $scope.firstTime = false
+    }
+  }
   $scope.getJokes(10)
   $scope.continuous = true
   $scope.played = []
-  $scope.read = function(curIdx,clicked) {
-  if (clicked) {
-    $scope.played = []
+  $scope.curPlay = 0
+  $scope.m = 1
+  $scope.read = function(curIdx,clicked,curPlay) {
+    if (clicked) {
+      $scope.curPlay +=1
+      curPlay = $scope.curPlay
+      $scope.played = []
+      if (window.speechSynthesis !== undefined) {
+        window.speechSynthesis.cancel()
+      }
+    }
+
+    if ($scope.played.some(function(cur) {return cur === curIdx}) ||
+      $scope.curPlay !== curPlay) {
+        return
+    } else {
+      $scope.played.push(curIdx)
+    }
+
+    $scope.jokes[curIdx].jokeClass="text-warning"
+    var joke = $scope.jokes[curIdx].data.title + " " + $scope.jokes[curIdx].data.selftext
     if (window.speechSynthesis !== undefined) {
-      window.speechSynthesis.cancel()
-    }
-  }
-  if ($scope.played.some(function(cur) {return cur === curIdx})) {
-    return
-  } else {
-    $scope.played.push(curIdx)
-  }
+      if ($scope.continuous) {
+        nativetts(joke,function(){
+          setTimeout(function(){
+            $scope.read(curIdx+1,false,curPlay)
+            $scope.$apply()
+          },1000)
+          })
+      } else {
+        nativetts(joke)
+      }
 
-
-  $scope.jokes[curIdx].jokeClass="text-warning"
-  var joke = $scope.jokes[curIdx].data.title + " " + $scope.jokes[curIdx].data.selftext
-  if (window.speechSynthesis !== undefined) {
-    if ($scope.continuous) {
-      nativetts(joke,function(){
-        setTimeout(function(){
-          $scope.read(curIdx+1)
-          $scope.$apply()
-        },1000)
-        })
     } else {
-      nativetts(joke)
-    }
+      if (window['aud'+$scope.curPlay] !== undefined) {
+        window['aud'+$scope.curPlay].pause()
+      }
+      if ($scope.continuous) {
+        apitts(joke,function(){setTimeout(function(){$scope.read(curIdx+1,false,curPlay);$scope.$apply()},1000)})
+      } else {
+        apitts(joke)
+      }
 
-  } else {
-    if (window.aud !== undefined) {
-      window.aud.pause()
     }
-    if ($scope.continuous) {
-      apitts(joke,function(){setTimeout(function(){$scope.read(curIdx+1)},1000)})
-    } else {
-      apitts(joke)
-    }
-
-  }
   }
   $scope.pause = function() {
     if (window.speechSynthesis !== undefined) {
       window.speechSynthesis.pause()
     } else {
-      window.aud.pause()
+      window['aud'+$scope.curPlay].pause()
     }
   }
   $("[name='my-checkbox']").bootstrapSwitch({
@@ -85,8 +98,9 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     }
     $.each(arr, function () {
         var u = new SpeechSynthesisUtterance(this.trim())
-        u.onend = cb
+        u.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Alex'; })[0];
         window.speechSynthesis.speak(u)
+        u.onend = cb
     })
 
   }
@@ -94,7 +108,8 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
 })(window.angular);
 var chunkLength = 150;
 var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?,]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');
-
+var u = new SpeechSynthesisUtterance()
+u.voice = u.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Alex'; })[0];
 
 function apitts(txt,cb) {
   window.aud = new Audio("http://tts-api.com/tts.mp3?q=" + encodeURIComponent(txt))
