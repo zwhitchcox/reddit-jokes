@@ -36,7 +36,6 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
 
       if ($scope.played.some(function(cur) {return cur === curIdx}) ||
         $scope.curPlay !== curPlay) {
-          console.log(curPlay,$scope.curPlay)
           return
       } else {
         $scope.played.push(curIdx)
