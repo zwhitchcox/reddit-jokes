@@ -20,7 +20,6 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
   $scope.curPlay = 0
   $scope.read = function(curIdx,clicked,curPlay) {
     if (clicked) {
-      console.log('clicked')
       $scope.curPlay +=1
       curPlay = $scope.curPlay
       $scope.played = []
@@ -98,7 +97,7 @@ var u = new SpeechSynthesisUtterance()
 u.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Alex'; })[0];
 
 function apitts(txt,cb) {
-  if (window.aud !== undefined) {window.aud.pause()}
+  if (window.aud !== undefined && window.aud !== null) {window.aud.pause()}
   window.aud = new Audio("http://tts-api.com/tts.mp3?q=" + encodeURIComponent(txt))
   window.aud.play()
   window.aud.addEventListener('ended',cb, false)
