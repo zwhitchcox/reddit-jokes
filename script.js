@@ -39,6 +39,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       curPlay = $scope.curPlay
       $scope.played = []
       if (window.speechSynthesis !== undefined) {
+
         window.speechSynthesis.cancel()
       }
     }
@@ -80,7 +81,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     if (window.speechSynthesis !== undefined) {
       window.speechSynthesis.pause()
     } else {
-      window['aud'+$scope.curPlay].pause()
+      window.aud.pause()
     }
   }
   $("[name='my-checkbox']").bootstrapSwitch({
