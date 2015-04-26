@@ -4,7 +4,6 @@ var app = angular.module('app', ['ngResource']);
 
 app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,$http) {
   $scope.getJokes = function(sub) {
-    $scope.pause()
     $http.jsonp('http://www.reddit.com/r/' + sub + '.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
       .success(function(res) {
         $scope.jokes = res.data.children
