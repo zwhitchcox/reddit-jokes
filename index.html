@@ -20,6 +20,10 @@ ga('send', 'pageview');
   .joke {
     cursor: pointer
   }
+  .ad {
+    position:fixed;
+    bottom:0;
+  }
   </style>
   <!-- SCROLLS -->
   <!-- load bootstrap and fontawesome via CDN -->
@@ -46,10 +50,9 @@ ga('send', 'pageview');
         <a class="navbar-brand">Jokes</a>
       </div>
       <ul class="nav navbar-nav">
-              <li><a class="btn" ng-click="stop()"><i class='glyphicon glyphicon-stop'></i></a></li>
-              <li><a>Continuous: <input ng-model="continuous" type="checkbox" name="my-checkbox" checked></a></li>
-              <li>
-                <li class="dropdown">
+        <li><a class="btn" ng-click="stop()"><i class='glyphicon glyphicon-stop'></i></a></li>
+        <li><a>Continuous: <input ng-model="continuous" type="checkbox" name="my-checkbox" checked></a></li>
+        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Subreddit<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ng-click="getJokes('jokes')">jokes</a></li>
@@ -62,6 +65,14 @@ ga('send', 'pageview');
             <li><a ng-click="getJokes('antiantijokes')">antiantijokes</a></li>
           </ul>
         </li>
+        <li>
+        <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input ng-model="custsub" type="text" placeholder="Custom Subreddit">
+        </div>
+        <button ng-click="getJokes(custsub)" class="btn btn-default">Go</button>
+        </form>
+      </li>
       </ul>
         </li>
       </ul>
@@ -85,10 +96,12 @@ ga('send', 'pageview');
   </div>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <!-- reddit-jokes -->
+  <div class="ad">
   <ins class="adsbygoogle"
        style="display:inline-block;width:728px;height:90px"
        data-ad-client="ca-pub-5931961133736315"
        data-ad-slot="3353560659"></ins>
+  </div>
   <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
