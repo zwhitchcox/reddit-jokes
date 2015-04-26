@@ -3,23 +3,10 @@
 var app = angular.module('app', ['ngResource']);
 
 app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,$http) {
-  var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
-  var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
-  var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-      // At least Safari 3+: "[object HTMLElementConstructor]"
-  var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
-  var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
-  if (!(isChrome || isFirefox || isSafari)) {
-    $scope.message = "This app is only supported by Chrome, Firefox, and Safari. Use at your own discretion."
-    $scope.badBrowser = true
-  }
-  $scope.getJokes = function(limit) {
-    $http.jsonp('http://www.reddit.com/r/jokes.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
-      .success(function(res) {
-        $scope.jokes = res.data.children
-      })
-  }
+  $http.jsonp('http://www.reddit.com/r/jokes.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
+    .success(function(res) {
+      $scope.jokes = res.data.children
+    })
   if (typeof(Storage) != "undefined") {
     if (localStorage.getItem("firstTime") === null) {
       $scope.firstTime = true
@@ -28,11 +15,9 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       $scope.firstTime = false
     }
   }
-  $scope.getJokes(10)
   $scope.continuous = true
   $scope.played = []
   $scope.curPlay = 0
-  $scope.m = 1
   $scope.read = function(curIdx,clicked,curPlay) {
     if (clicked) {
       $scope.curPlay +=1
