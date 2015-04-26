@@ -113,6 +113,7 @@ var u = new SpeechSynthesisUtterance()
 u.voice = u.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Alex'; })[0];
 
 function apitts(txt,cb) {
+  window.aud.pause()
   window.aud = new Audio("http://tts-api.com/tts.mp3?q=" + encodeURIComponent(txt))
   window.aud.play()
   window.aud.addEventListener('ended',cb, false)
