@@ -65,7 +65,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
   }
   $scope.pause = function() {
     if (window.speechSynthesis !== undefined) {
-      window.speechSynthesis.pause()
+      window.speechSynthesis.cancel()
     } else {
       window.aud.pause()
     }
