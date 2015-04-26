@@ -36,7 +36,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     }
 
     $scope.jokes[curIdx].jokeClass="text-warning"
-    var joke = $scope.jokes[curIdx].data.title + " " + $scope.jokes[curIdx].data.selftext
+    var joke = $scope.jokes[curIdx].data.title + ". " + $scope.jokes[curIdx].data.selftext
     if (window.speechSynthesis !== undefined) {
       if ($scope.continuous) {
         nativetts(joke,function(){
