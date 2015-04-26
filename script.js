@@ -62,6 +62,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     }
   }
   $scope.pause = function() {
+    ++$scope.curPlayed
     if (window.speechSynthesis !== undefined) {
       window.speechSynthesis.cancel()
     } else {
