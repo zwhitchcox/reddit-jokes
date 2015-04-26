@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style>
+  .stupidBrowser {
+    margin-top:50px;
+    background:#FCC;
+    padding:12px;
+    border-radius: 3px;
+  }
+  </style>
   <!-- SCROLLS -->
   <!-- load bootstrap and fontawesome via CDN -->
   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
@@ -19,22 +27,27 @@
 <body ng-app="app">
 <div ng-controller="Ctrl">
 <header>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand">Jokes</a>
       </div>
+      <ul class="nav navbar-nav">
+        <li><a class="btn" ng-click="pause()"><i class='glyphicon glyphicon-stop'></i></a></li>
+        <li><a>Continuous: <input ng-model="continuous" type="checkbox" name="my-checkbox" checked></a></li>
+      </ul>
     </div><!--/.container-fluid -->
   </nav>
 </header>
 <div class="container">
-  <button class="btn" ng-click="play()"><i class='glyphicon glyphicon-play'></i></button>
-  <button class="btn" ng-click="pause()"><i class='glyphicon glyphicon-pause'></i></button>
-  Continuous: <input ng-model="continuous" type="checkbox" name="my-checkbox" checked>
-  <div ng-repeat="joke in jokes track by $index" ng-click="read($index)">
+  <div class="stupidBrowser" ng-show="badBrowser">{{message}}</div>
+
+  <div ng-repeat="joke in jokes track by $index" ng-click="read($index,true)">
+    <p ng-class="joke.jokeClass">
     {{joke.data.title}}
     {{joke.data.selftext}}
-    <br><br>
+    </p>
+    <br>
   </div>
 </div>
 </div>
