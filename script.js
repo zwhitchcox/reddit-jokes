@@ -3,10 +3,12 @@
 var app = angular.module('app', ['ngResource']);
 
 app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,$http) {
-  $http.jsonp('http://www.reddit.com/r/jokes.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
-    .success(function(res) {
-      $scope.jokes = res.data.children
-    })
+  $scope.getJokes = function(sub) {
+    $http.jsonp('http://www.reddit.com/r/' + sub + '.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
+      .success(function(res) {
+        $scope.jokes = res.data.children
+      })
+  }
   if (typeof(Storage) != "undefined") {
     if (localStorage.getItem("firstTime") === null) {
       $scope.firstTime = true
@@ -15,53 +17,60 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       $scope.firstTime = false
     }
   }
+  $scope.getJokes('jokes')
   $scope.continuous = true
   $scope.played = []
   $scope.curPlay = 0
   $scope.read = function(curIdx,clicked,curPlay) {
-    if (clicked) {
-      $scope.curPlay +=1
-      curPlay = $scope.curPlay
-      $scope.played = []
+    if (!$scope.stopped) {
+      if (clicked) {
+        $scope.stopped = false
+        $scope.curPlay +=1
+        curPlay = $scope.curPlay
+        $scope.played = []
+        if (window.speechSynthesis !== undefined) {
+          window.speechSynthesis.cancel()
+        }
+      }
+
+      if ($scope.played.some(function(cur) {return cur === curIdx}) ||
+        $scope.curPlay !== curPlay) {
+          console.log(curPlay,$scope.curPlay)
+          return
+      } else {
+        $scope.played.push(curIdx)
+      }
+
+      $scope.jokes[curIdx].jokeClass="text-warning"
+      var joke = $scope.jokes[curIdx].data.title + ". " + $scope.jokes[curIdx].data.selftext
       if (window.speechSynthesis !== undefined) {
-        window.speechSynthesis.cancel()
-      }
-    }
+        if ($scope.continuous) {
+          nativetts(joke,function(){
+            setTimeout(function(){
+              $scope.read(curIdx+1,false,curPlay)
+              $scope.$apply()
+            },1000)
+            })
+        } else {
+          nativetts(joke)
+        }
 
-    if ($scope.played.some(function(cur) {return cur === curIdx}) ||
-      $scope.curPlay !== curPlay) {
-        return
-    } else {
-      $scope.played.push(curIdx)
-    }
-
-    $scope.jokes[curIdx].jokeClass="text-warning"
-    var joke = $scope.jokes[curIdx].data.title + ". " + $scope.jokes[curIdx].data.selftext
-    if (window.speechSynthesis !== undefined) {
-      if ($scope.continuous) {
-        nativetts(joke,function(){
-          setTimeout(function(){
-            $scope.read(curIdx+1,false,curPlay)
-            $scope.$apply()
-          },1000)
-          })
       } else {
-        nativetts(joke)
-      }
+        if (window['aud'+$scope.curPlay] !== undefined) {
+          window['aud'+$scope.curPlay].pause()
+        }
+        if ($scope.continuous) {
+          apitts(joke,function(){setTimeout(function(){$scope.read(curIdx+1,false,curPlay);$scope.$apply()},1000)})
+        } else {
+          apitts(joke)
+        }
 
-    } else {
-      if (window['aud'+$scope.curPlay] !== undefined) {
-        window['aud'+$scope.curPlay].pause()
-      }
-      if ($scope.continuous) {
-        apitts(joke,function(){setTimeout(function(){$scope.read(curIdx+1,false,curPlay);$scope.$apply()},1000)})
-      } else {
-        apitts(joke)
       }
 
     }
   }
-  $scope.pause = function() {
+  $scope.stop = function() {
+    $scope.stopped = true
     ++$scope.curPlayed
     if (window.speechSynthesis !== undefined) {
       window.speechSynthesis.cancel()
