@@ -25,7 +25,6 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       curPlay = $scope.curPlay
       $scope.played = []
       if (window.speechSynthesis !== undefined) {
-        console.log('clicked')
         window.speechSynthesis.cancel()
       }
     }
