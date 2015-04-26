@@ -10,8 +10,8 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       // At least Safari 3+: "[object HTMLElementConstructor]"
   var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
   var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
-  if (!(isChrome || isFirefox)) {
-    $scope.message = "This app is only supported by Chrome and Firefox. Use at your own discretion."
+  if (!(isChrome || isFirefox || isSafari)) {
+    $scope.message = "This app is only supported by Chrome, Firefox, and Safari. Use at your own discretion."
     $scope.badBrowser = true
   }
   $scope.getJokes = function(limit) {
@@ -37,17 +37,13 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
   }
 
 
-  $scope.jokes[curIdx].jokeClass="alert alert-success"
+  $scope.jokes[curIdx].jokeClass="text-warning"
   var joke = $scope.jokes[curIdx].data.title + " " + $scope.jokes[curIdx].data.selftext
   if (window.speechSynthesis !== undefined) {
-
-
     if ($scope.continuous) {
-
       nativetts(joke,function(){
         setTimeout(function(){
           $scope.read(curIdx+1)
-          $scope.jokes[curIdx].jokeClass="text-warning"
           $scope.$apply()
         },1000)
         })

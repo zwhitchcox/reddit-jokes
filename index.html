@@ -2,8 +2,7 @@
 <html>
 <head>
   <style>
-  .stupidBrowser {
-    margin-top:50px;
+  .browsErr {
     background:#FCC;
     padding:12px;
     border-radius: 3px;
@@ -39,14 +38,18 @@
     </div><!--/.container-fluid -->
   </nav>
 </header>
-<div class="container">
-  <div class="stupidBrowser" ng-show="badBrowser">{{message}}</div>
-
-  <div ng-repeat="joke in jokes track by $index" ng-click="read($index,true)">
-    <p ng-class="joke.jokeClass">
+<div class="container" style="margin-top:70px">
+  <div class="browsErr" ng-show="badBrowser">{{message}}</div>
+  <div ng-repeat="joke in jokes track by $index">
+    <p ng-class="joke.jokeClass" >
+    <span ng-click="read($index,true)">
     {{joke.data.title}}
     {{joke.data.selftext}}
+    <span>
+    <br>
+    <a ng-href="joke.data.permalink">permalink</a>
     </p>
+
     <br>
   </div>
 </div>
