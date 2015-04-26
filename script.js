@@ -20,11 +20,12 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
   $scope.curPlay = 0
   $scope.read = function(curIdx,clicked,curPlay) {
     if (clicked) {
+      console.log('clicked')
       $scope.curPlay +=1
       curPlay = $scope.curPlay
       $scope.played = []
       if (window.speechSynthesis !== undefined) {
-
+        console.log('clicked')
         window.speechSynthesis.cancel()
       }
     }
@@ -95,7 +96,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
 var chunkLength = 150;
 var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?,]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');
 var u = new SpeechSynthesisUtterance()
-u.voice = u.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Alex'; })[0];
+u.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Alex'; })[0];
 
 function apitts(txt,cb) {
   if (window.aud !== undefined) {window.aud.pause()}
