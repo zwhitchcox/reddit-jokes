@@ -5,11 +5,27 @@ var app = angular.module('app', ['ngResource']);
 app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,$http) {
   $scope.getJokes = function(sub) {
     $scope.stop()
+
     $http.jsonp('http://www.reddit.com/r/' + sub + '.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
       .success(function(res) {
-        $scope.jokes = res.data.children
+        $scope.jokes = res.data.children.reduce(function(prev,cur) {
+          var ids;
+          if (localStorage['ids'] === null || localStorage['ids'] === undefined || localStorage['ids'] === "") {
+            ids = [];
+          } else {
+            ids = JSON.parse(localStorage["ids"]);
+          }
+          console.log(cur.data.id)
+          console.log(!~ids.indexOf(cur.data.id))
+          console.log(!$scope.omitRedundancies)
+          if (!~ids.indexOf(cur.data.id) || !$scope.omitRedundancies) {
+            prev.push(cur)
+          }
+          return prev
+        },[])
       })
   }
+  $scope.omitRedundancies = true
   if (typeof(Storage) != "undefined") {
     if (localStorage.getItem("firstTime") === null) {
       $scope.firstTime = true
@@ -40,6 +56,10 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       } else {
         $scope.played.push(curIdx)
       }
+
+      // add id to local storage
+      addIdToLocalStorage($scope.jokes[curIdx].data.id)
+
 
       $scope.jokes[curIdx].jokeClass="text-warning"
       var joke = $scope.jokes[curIdx].data.title + ". " + $scope.jokes[curIdx].data.selftext
@@ -116,4 +136,16 @@ function apitts(txt,cb) {
   window.aud = new Audio("http://tts-api.com/tts.mp3?q=" + encodeURIComponent(txt))
   window.aud.play()
   window.aud.addEventListener('ended',cb, false)
+}
+function addIdToLocalStorage(id) {
+  var ids;
+  if (localStorage['ids'] === null || localStorage['ids'] === undefined || localStorage['ids'] === "") {
+    ids = [];
+  } else {
+    ids = JSON.parse(localStorage["ids"]);
+  }
+  if (!~ids.indexOf(id)) {
+    ids.push(id)
+    localStorage["ids"] = JSON.stringify(ids);
+  }
 }
